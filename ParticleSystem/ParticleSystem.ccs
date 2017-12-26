@@ -3,8 +3,42 @@
   <SolutionFolder>
     <Group ctype="ResourceGroup">
       <RootFolder Name=".">
-        <Image Name="HelloWorld.png" />
+        <PlistImageFolder Image="particletexture.png" PListFile="particletexture.plist" Name=".particletexture_PList.Dir">
+          <PlistImageFile Name="bomboff.png" Key="bomboff.png" />
+          <PlistImageFile Name="bombon.png" Key="bombon.png" />
+          <PlistImageFile Name="bombtd.png" Key="bombtd.png" />
+          <PlistImageFile Name="bubble.png" Key="bubble.png" />
+          <PlistImageFile Name="circle.png" Key="circle.png" />
+          <PlistImageFile Name="cloud.png" Key="cloud.png" />
+          <PlistImageFile Name="comet.png" Key="comet.png" />
+          <PlistImageFile Name="emittericon.png" Key="emittericon.png" />
+          <PlistImageFile Name="emittericon1.png" Key="emittericon1.png" />
+          <PlistImageFile Name="emitteroff.png" Key="emitteroff.png" />
+          <PlistImageFile Name="emitteron.png" Key="emitteron.png" />
+          <PlistImageFile Name="emittertd.png" Key="emittertd.png" />
+          <PlistImageFile Name="fireworkoff.png" Key="fireworkoff.png" />
+          <PlistImageFile Name="fireworkon.png" Key="fireworkon.png" />
+          <PlistImageFile Name="fireworktd.png" Key="fireworktd.png" />
+          <PlistImageFile Name="flare.png" Key="flare.png" />
+          <PlistImageFile Name="raindrop.png" Key="raindrop.png" />
+          <PlistImageFile Name="rolloff.png" Key="rolloff.png" />
+          <PlistImageFile Name="rollon.png" Key="rollon.png" />
+          <PlistImageFile Name="rolltd.png" Key="rolltd.png" />
+          <PlistImageFile Name="sliderballnormal.png" Key="sliderballnormal.png" />
+          <PlistImageFile Name="sliderballpressed.png" Key="sliderballpressed.png" />
+          <PlistImageFile Name="sliderProgress.png" Key="sliderProgress.png" />
+          <PlistImageFile Name="sliderTrack.png" Key="sliderTrack.png" />
+          <PlistImageFile Name="spark.png" Key="spark.png" />
+          <PlistImageFile Name="waterball.png" Key="waterball.png" />
+          <PlistImageFile Name="waterballon.png" Key="waterballon.png" />
+          <PlistImageFile Name="waterballtd.png" Key="waterballtd.png" />
+        </PlistImageFolder>
+        <TTF Name="arial.ttf" />
+        <Image Name="background.png" />
+        <Fnt Name="couriernew32.fnt" />
         <Project Name="MainScene.csd" Type="Scene" />
+        <TTF Name="Marker Felt.ttf" />
+        <PlistParticleFile Name="particle_texture.plist" />
       </RootFolder>
     </Group>
   </SolutionFolder>
