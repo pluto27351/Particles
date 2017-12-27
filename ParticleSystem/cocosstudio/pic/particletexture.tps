@@ -204,6 +204,29 @@
         </struct>
         <key>individualSpriteSettings</key>
         <map type="IndividualSpriteSettingsMap">
+            <key type="filename">airplane.png</key>
+            <key type="filename">bubble.png</key>
+            <key type="filename">circle.png</key>
+            <key type="filename">cloud.png</key>
+            <key type="filename">comet.png</key>
+            <key type="filename">flare.png</key>
+            <key type="filename">raindrop.png</key>
+            <key type="filename">spark.png</key>
+            <struct type="IndividualSpriteSettings">
+                <key>pivotPoint</key>
+                <point_f>0.5,0.5</point_f>
+                <key>scale9Enabled</key>
+                <false/>
+                <key>scale9Borders</key>
+                <rect>16,16,32,32</rect>
+                <key>scale9Paddings</key>
+                <rect>16,16,32,32</rect>
+                <key>scale9FromFile</key>
+                <false/>
+            </struct>
+            <key type="filename">airplaneoff.png</key>
+            <key type="filename">airplaneon.png</key>
+            <key type="filename">airplanetd.png</key>
             <key type="filename">bomboff.png</key>
             <key type="filename">bombon.png</key>
             <key type="filename">bombtd.png</key>
@@ -230,25 +253,6 @@
                 <rect>19,19,37,37</rect>
                 <key>scale9Paddings</key>
                 <rect>19,19,37,37</rect>
-                <key>scale9FromFile</key>
-                <false/>
-            </struct>
-            <key type="filename">bubble.png</key>
-            <key type="filename">circle.png</key>
-            <key type="filename">cloud.png</key>
-            <key type="filename">comet.png</key>
-            <key type="filename">flare.png</key>
-            <key type="filename">raindrop.png</key>
-            <key type="filename">spark.png</key>
-            <struct type="IndividualSpriteSettings">
-                <key>pivotPoint</key>
-                <point_f>0.5,0.5</point_f>
-                <key>scale9Enabled</key>
-                <false/>
-                <key>scale9Borders</key>
-                <rect>16,16,32,32</rect>
-                <key>scale9Paddings</key>
-                <rect>16,16,32,32</rect>
                 <key>scale9FromFile</key>
                 <false/>
             </struct>
@@ -311,6 +315,10 @@
             <filename>rolltd.png</filename>
             <filename>waterball.png</filename>
             <filename>waterballon.png</filename>
+            <filename>airplaneoff.png</filename>
+            <filename>airplaneon.png</filename>
+            <filename>airplanetd.png</filename>
+            <filename>airplane.png</filename>
         </array>
         <key>ignoreFileList</key>
         <array/>

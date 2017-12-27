@@ -41,6 +41,7 @@ private:
 	CSwitchButton *_rollSwitchBtn;
 	CSwitchButton *_waterballSwitchBtn;
 	CSwitchButton *_bombSwitchBtn;
+	CSwitchButton *_airplaneSwitchBtn;
 	CSwitchButton *_nowbtn = NULL;
 
 	CButton *btn;

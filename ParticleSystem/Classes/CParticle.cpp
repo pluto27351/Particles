@@ -425,7 +425,7 @@ bool CParticle::doStep(float dt)
 			sint = sinf(M_PI*_fElapsedTime / _fLifeTime*2);
 			cost = cosf(M_PI_2*_fElapsedTime / _fLifeTime);
 			float rx = -cosf((_Pos.x + _em.x) / 45 * M_PI)*5;
-			_Particle->setScale(_fSize + sint * 1.5f);
+			//_Particle->setScale(_fSize + sint * 1.5f);
 			_Particle->setScale(_fSize);
 			_Particle->setOpacity(_fOpacity * cost);
 			_Particle->setColor(_color);
@@ -433,6 +433,31 @@ bool CParticle::doStep(float dt)
 			_Pos.x += _Direction.x * _fVelocity * dt * PIXEL_PERM;
 			float tt = GRAVITY_Y(_fElapsedTime, dt, _fGravity);
 			_Pos.y += (_Direction.y * _fVelocity + tt)* dt * PIXEL_PERM*1.5;
+			_Particle->setPosition(_Pos);
+		}
+		break;
+	case AIRPLANE:
+		if (!_bVisible && _fElapsedTime >= _fDelayTime) {
+			_fElapsedTime = _fElapsedTime - _fDelayTime; // 重新開始計時
+			_bVisible = true;
+			_Particle->setVisible(_bVisible);
+			_Particle->setColor(_color);
+			_Particle->setPosition(_Pos);
+			_Particle->setOpacity(255);
+		}
+		else if (_fElapsedTime > _fLifeTime) {
+			_bVisible = false;
+			_Particle->setVisible(_bVisible);
+			return true; // 分子生命週期已經結束
+		}
+		else if (_bVisible) {
+			cost = cosf(M_PI_2*_fElapsedTime / _fLifeTime);
+			float rx = -cosf((_Pos.x + _em.x) / 45 * M_PI) * 5;
+			_Particle->setScale(_fSize);
+			if(_fVelocity == 0)_Particle->setOpacity(_fOpacity * cost);
+			_Particle->setColor(_color);
+			_Pos.x += _Direction.x * _fVelocity * dt;
+			_Pos.y += _Direction.y * _fVelocity* dt;
 			_Particle->setPosition(_Pos);
 		}
 		break;
@@ -642,6 +667,12 @@ void CParticle::setBehavior(int iType)
 		_color = Color3B(rand() % 128, rand() % 128, 128 + rand() % 128);
 		_fElapsedTime = 0;
 		//_fDelayTime = rand() % 100 / 1000.0f;
+		_Particle->setScale(_fSize);
+		break;
+	case AIRPLANE:
+		_fIntensity = 1;
+		_fOpacity = 255;
+		_fElapsedTime = 0;
 		_Particle->setScale(_fSize);
 		break;
 	}

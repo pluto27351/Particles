@@ -77,6 +77,10 @@ bool ParticleSystemScene::init()
 	_bombSwitchBtn->setButtonInfo("bomboff.png", "bombon.png", "bombtd.png", loc + Vec2(0,400));
 	this->addChild(_bombSwitchBtn, 2);
 
+	_airplaneSwitchBtn = CSwitchButton::create();
+	_airplaneSwitchBtn->setButtonInfo("airplaneoff.png", "airplaneon.png", "airplanetd.png", loc + Vec2(-100,400));
+	this->addChild(_airplaneSwitchBtn, 2);
+
 	// Particle Control System
 	// 最好的方式是，以下的 Slider 根據這裡的設定值，顯示出正確的數值與位置
 	_ParticleControl.init(*this);
@@ -223,7 +227,8 @@ bool ParticleSystemScene::onTouchBegan(cocos2d::Touch *pTouch, cocos2d::Event *p
 		!_fireworkSwitchBtn->touchesBegan(touchLoc) && 
 		!_rollSwitchBtn->touchesBegan(touchLoc) && 
 		!_waterballSwitchBtn->touchesBegan(touchLoc) && 
-		!_bombSwitchBtn->touchesBegan(touchLoc) && !_bEmitterOn ) _ParticleControl.onTouchesBegan(touchLoc);
+		!_bombSwitchBtn->touchesBegan(touchLoc) &&
+		!_airplaneSwitchBtn->touchesBegan(touchLoc) && !_bEmitterOn ) _ParticleControl.onTouchesBegan(touchLoc);
 
 	for (int i = 0; i < 7; i++) {
 		btn[i].isTouched(touchLoc);
@@ -244,7 +249,8 @@ void  ParticleSystemScene::onTouchMoved(cocos2d::Touch *pTouch, cocos2d::Event *
 		!_fireworkSwitchBtn->touchesMoved(touchLoc) && 
 		!_rollSwitchBtn->touchesMoved(touchLoc) && 
 		!_waterballSwitchBtn->touchesMoved(touchLoc) &&
-		!_bombSwitchBtn->touchesMoved(touchLoc) && !_bEmitterOn ) _ParticleControl.onTouchesMoved(touchLoc);
+		!_bombSwitchBtn->touchesMoved(touchLoc) && 
+		!_airplaneSwitchBtn->touchesMoved(touchLoc) && !_bEmitterOn ) _ParticleControl.onTouchesMoved(touchLoc);
 
 	for (int i = 0; i < 7; i++) {
 		btn[i].isLeave(touchLoc);
@@ -364,6 +370,30 @@ void  ParticleSystemScene::onTouchEnded(cocos2d::Touch *pTouch, cocos2d::Event *
 		else { // 關閉 Emitter 圖示
 			_EmitterSprite->setVisible(false);
 			_ParticleControl._iType = itype;
+			_nowbtn = NULL;
+		}
+		_ParticleControl.setEmitter(_bEmitterOn); // 更新控制系統中的 Emitter 狀態
+	}
+
+	if (_airplaneSwitchBtn->touchesEnded(touchLoc))
+	{
+		_bEmitterOn = _airplaneSwitchBtn->getStatus();
+		if (_bEmitterOn) { // 顯示 Emitter 圖示
+			if (_nowbtn) {
+				_nowbtn->setStatusfalse();
+
+			}
+			_nowbtn = _airplaneSwitchBtn;
+			_EmitterSprite->setVisible(true);
+			_ParticleControl._iType = 104;
+			_ParticleControl.em = _ParticleControl._emitterPt;
+			_ParticleControl._bAiroplane = 1;
+			_ParticleControl._fElpasedTime = 0;
+		}
+		else { // 關閉 Emitter 圖示
+			_EmitterSprite->setVisible(false);
+			_ParticleControl._iType = itype;
+			_ParticleControl._bAiroplane = 0;
 			_nowbtn = NULL;
 		}
 		_ParticleControl.setEmitter(_bEmitterOn); // 更新控制系統中的 Emitter 狀態

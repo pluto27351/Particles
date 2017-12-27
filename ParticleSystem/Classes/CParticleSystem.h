@@ -28,6 +28,7 @@ private:
 	
 public:
 	int _bThunder = 0;
+	int _bAiroplane = 0;
 	// Emitter 設定的相關參數
 	cocos2d::Point _emitterPt;// Emitter 的位置	
 	cocos2d::Point em;
@@ -47,6 +48,7 @@ public:
 	float   _fWindDir;
 	char    *_cName;
 	float _totalTime=0;
+
 	//cocos2d::Point _windDir;  // 風的方向，本範例沒有實作
 
 	CParticleSystem();

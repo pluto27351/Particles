@@ -334,6 +334,73 @@ void CParticleSystem::doStep(float dt)
 					
 				}
 				break;
+			case AIRPLANE:
+				if (_bAiroplane == 1) {
+					if (_iFree >= 5) {
+						_fElpasedTime = 0;
+						for (int i = 5; i >0; i--) {
+							Vec2 pos;
+							pos = Vec2(1280, em.y);
+							pos.x += 50 * (i / 2);
+							pos.y += 50 * (((i % 2) * 2 - 1)*(i/2));  // y+(15*±2)  y+(15*±1)  y+(15*±0)  
+							get = _FreeList.front();
+							get->setBehavior(AIRPLANE);
+							get->setVelocity((float)1400/3.5);
+							get->setLifetime(3.5f);
+							get->setGravity(0);
+							get->setPosition(pos);
+							get->setColor(Color3B(255,255,255));
+							get->setSpin(0);
+							get->setOpacity(255);
+							get->setSize(2.0f);
+							get->setParticleName("airplane.png");
+							get->setRDelayTime(0);
+							// 根據 _fSpread 與 _vDir 產生方向
+							get->setDirection(Vec2(-1,0));
+							_FreeList.pop_front();
+							_InUsedList.push_front(get);
+							_iFree--; _iInUsed++;
+						}
+						_bAiroplane = 2;
+					}
+				}
+				else{
+					if (_bAiroplane == 2 && _fElpasedTime < 3.5) {
+						if (_iFree >= 5) {
+							for (int i = 5; i >0; i--) {
+								Vec2 pos;
+								pos = Vec2(1300, em.y);
+								pos.x += 50 * (i / 2) - _fElpasedTime* 1400.0f / 3.5f;
+								pos.y += 50 * (((i % 2) * 2 - 1)*(i / 2));  // y+(15*±2)  y+(15*±1)  y+(15*±0)  
+								get = _FreeList.front();
+								get->setBehavior(AIRPLANE);
+								get->setVelocity(0);
+								get->setLifetime(1.5f);
+								get->setGravity(0);
+								get->setPosition(pos);
+								if(i/2 == 2)get->setColor(Color3B(255,0,0));       
+								else if(i/2 ==1)get->setColor(Color3B(0, 0, 255)); 
+								else get->setColor(Color3B(255, 255, 255));        
+								get->setSpin(0);
+								get->setOpacity(255);
+								get->setSize(0.7f);
+								get->setParticleName("cloud.png");
+								get->setRDelayTime(0);
+								// 根據 _fSpread 與 _vDir 產生方向
+								get->setDirection(Vec2(0, 0));
+								_FreeList.pop_front();
+								_InUsedList.push_front(get);
+								_iFree--; _iInUsed++;
+							}
+						}
+					}
+					else {
+						_fElpasedTime = 0;
+						_bAiroplane = 1;
+						em = _emitterPt;
+					}
+				}
+				break;
 		}
 
 		_fElpasedTime += dt;
