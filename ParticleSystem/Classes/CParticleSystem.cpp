@@ -17,6 +17,12 @@ void CParticleSystem::setEmitter(bool bEm)
 
 void CParticleSystem::init(cocos2d::Layer &inlayer)
 {
+	_monster = Sprite::createWithSpriteFrameName("monster.png");
+	_monster->setPosition(mouse);
+	_monster->setOpacity(180);
+	_monster->setVisible(false);
+	inlayer.addChild(_monster, 1);
+
 	_iFree = NUMBER_PARTICLES;
 	_iInUsed = 0;
 	_pParticles = new CParticle[NUMBER_PARTICLES]; // 取得所需要的 particle 空間
@@ -26,6 +32,7 @@ void CParticleSystem::init(cocos2d::Layer &inlayer)
 		_pParticles[i].setParticle("flare.png", inlayer);
 		_FreeList.push_front(&_pParticles[i]);
 	}
+
 }
 
 void CParticleSystem::doStep(float dt)
@@ -64,43 +71,91 @@ void CParticleSystem::doStep(float dt)
 				_bThunder = 1;
 			}
 		}
-	}
-	
-	if (_bBalloon == 1) {
-		if (_iFree != 0) {
-			balloonSize += dt*0.5;
-			get = _FreeList.front();
-			get->setBehavior(BALLOON);
-			get->setPosition(mouse);
-			get->setGravity(_fGravity);
-			get->setLifetime(0.1f);
-			get->setVelocity(0);
-			get->setSize(balloonSize);
-			_FreeList.pop_front();
-			_InUsedList.push_front(get);
-			_iFree--; _iInUsed++;
+		else if (_bmagic == 1) {
+		//	CCLOG("%f", _fElpasedTime);
+			// 從 _FreeList 取得一個分子給放到 _InUsed
+			if (_iFree > 100) {
+				for (int i = 0; i < 10; i++) {
+					get = _FreeList.front();
+					get->setBehavior(MAGIC);
+					get->setPosition(mouse);
+					get->setGravity(_fGravity);
+					get->setParticleName(name);
+					_FreeList.pop_front();
+					_InUsedList.push_front(get);
+					_iFree--; _iInUsed++;
+				}
+				Color3B color = Color3B(rand() % 255, rand() % 255, rand() % 255);
+				for (int i = 0; i < 50; i++) {
+					Vec2 pos;
+					float r = (float)i / 50 * M_PI * 2;
+					pos.x = mouse.x + 200 * cosf(r);
+					pos.y = mouse.y + 200 * sinf(r) / 2;
+					get = _FreeList.front();
+					get->setBehavior(EMITTER_DEFAULT);
+					get->setVelocity(2);
+					get->setLifetime(0.5);
+					get->setGravity(0);
+					get->setPosition(pos);
+					get->setColor(color);
+					get->setSpin(0);
+					get->setOpacity(200);
+					get->setSize(0.025f);
+					get->setParticleName(name);
+					get->setWindDir(0);
+					get->setWindStr(0);
+					Vec2 vdir(cosf(r) * 2.5, 7);
+					get->setDirection(vdir);
+					_FreeList.pop_front();
+					_InUsedList.push_front(get);
+					_iFree--; _iInUsed++;
+				}
+			}
+			if (_fElpasedTime > 12) {
+				_monster->setVisible(false);
+				_fElpasedTime = 0;
+			}
+			else if (_fElpasedTime > 10) {
+				_monster->setPosition(mouse+Vec2(10,20));
+				_monster->setVisible(true);
+			}
 		}
-	}
-	else if (_bBalloon == 2) {
-		if (_iFree > 10) {
-			for (int i = 0; i < 10; i++) {
+		else if (_bBalloon == 1) {
+			if (_iFree != 0) {
+				balloonSize += dt*0.5;
 				get = _FreeList.front();
 				get->setBehavior(BALLOON);
 				get->setPosition(mouse);
 				get->setGravity(_fGravity);
-				get->setLifetime(10.0f);
+				get->setLifetime(0.1f);
+				get->setVelocity(0);
 				get->setSize(balloonSize);
-				get->setVelocity(1);
-				get->setWindDir(_fWindDir);
-				get->setWindStr(_fWindStr);
-				Vec2 vdir(0, 3.0f);
-				get->setDirection(vdir);
 				_FreeList.pop_front();
 				_InUsedList.push_front(get);
 				_iFree--; _iInUsed++;
 			}
-			_bBalloon = 0;
-			balloonSize = 0.125f;
+		}
+		else if (_bBalloon == 2) {
+			if (_iFree > 10) {
+				for (int i = 0; i < 10; i++) {
+					get = _FreeList.front();
+					get->setBehavior(BALLOON);
+					get->setPosition(mouse);
+					get->setGravity(_fGravity);
+					get->setLifetime(10.0f);
+					get->setSize(balloonSize);
+					get->setVelocity(1);
+					get->setWindDir(_fWindDir);
+					get->setWindStr(_fWindStr);
+					Vec2 vdir(0, 3.0f);
+					get->setDirection(vdir);
+					_FreeList.pop_front();
+					_InUsedList.push_front(get);
+					_iFree--; _iInUsed++;
+				}
+				_bBalloon = 0;
+				balloonSize = 0.125f;
+			}
 		}
 	}
 
@@ -183,7 +238,8 @@ void CParticleSystem::doStep(float dt)
 						em.y += 6;
 					}
 					else {
-						if (_iFree > 100) {
+						int k = rand() % 3;
+						if (k==0 &&_iFree > 100) {
 							for (int i = 0; i < 100; i++) {
 								get = _FreeList.front();
 								get->setBehavior(EXPLOSION);
@@ -403,10 +459,11 @@ void CParticleSystem::doStep(float dt)
 				break;
 		}
 
-		_fElpasedTime += dt;
-		_totalTime += dt;
+		
 	}
 
+	_fElpasedTime += dt;
+	_totalTime += dt;
 	if (_iInUsed != 0) { // 有分子需要更新時
 		for (it = _InUsedList.begin(); it != _InUsedList.end(); ) {
 			if ((*it)->doStep(dt)) { // 分子生命週期已經到達
@@ -580,36 +637,46 @@ void CParticleSystem::onTouchesBegan(const cocos2d::CCPoint &touchPoint)
 			}
 		}
 		break;
-	//case THUNDER:
+	case MAGIC:
+		_bmagic = 1;
+		_fElpasedTime = 0;
+		mouse = touchPoint;
+		break;
+	//case MAGIC:
 	//	// 從 _FreeList 取得一個分子給放到 _InUsed
-	//	if (_iFree > 60) {
-	//		float r = rand()%51-25;
-	//		r = r*M_PI/180;
-	//		int k = rand() % 2*2-1;
-	//		for (int i = 0; i < 60; i++) {
-	//			Vec2 move = Vec2(0, 450);
-	//			if (i < 20) {
-	//				move.x -= (100 / 20 * i)*k;
-	//				move.y -= (150 / 20 * i );
-	//			}
-	//			else if (i < 40) {
-	//				move.x += (-100 +(200 / 20 * (i-19)))*k;
-	//				move.y -= (150 + (75 / 20 * (i - 19)));
-	//			}
-	//			else {
-	//				move.x -= (-90 + (100 / 20 * (i - 39)))*k;
-	//				move.y -= (213 + (225 / 20 * (i - 39)));
-	//			}
-	//			move.x = cosf(r)*move.x + sinf(r)*move.y;
-	//			move.y = -sinf(r)*move.x + cosf(r)*move.y;
+	//	if (_iFree > 100) {
+	//		for (int i = 0; i < 50; i++) {
 	//			get = _FreeList.front();
-	//			get->setBehavior(THUNDER);
-	//			//get->setPosition(touchPoint + move);
+	//			get->setBehavior(MAGIC);
 	//			get->setPosition(touchPoint);
 	//			get->setGravity(_fGravity);
-	//			get->setRDelayTime((float)i/150);
-	//			get->setSize(4-(float)i/16);
-	//			get->setDelayTime(0);
+	//			get->setParticleName(name);
+	//			_FreeList.pop_front();
+	//			_InUsedList.push_front(get);
+	//			_iFree--; _iInUsed++;
+	//		}
+	//		Color3B color = Color3B(rand() % 255, rand() % 255, rand() % 255);
+	//		for (int i = 0; i < 50; i++) {
+	//			Vec2 pos;
+	//			float r = (float)i / 50 * M_PI * 2;
+	//			pos.x = touchPoint.x + 200 * cosf(r);
+	//			pos.y = touchPoint.y + 200 * sinf(r) / 2;
+	//			get = _FreeList.front();
+	//			get->setBehavior(EMITTER_DEFAULT);
+	//			get->setVelocity(2);
+	//			get->setLifetime(0.5);
+	//			get->setGravity(0);
+	//			get->setPosition(pos);
+	//			get->setColor(color);
+	//			get->setSpin(0);
+	//			get->setOpacity(255);
+	//			get->setSize(0.025f);
+	//			//get->setParticleName(_cName);
+	//			get->setParticleName(name);
+	//			get->setWindDir(0);
+	//			get->setWindStr(0);
+	//			Vec2 vdir(cosf(r)*3, 4);
+	//			get->setDirection(vdir);
 	//			_FreeList.pop_front();
 	//			_InUsedList.push_front(get);
 	//			_iFree--; _iInUsed++;
@@ -617,48 +684,6 @@ void CParticleSystem::onTouchesBegan(const cocos2d::CCPoint &touchPoint)
 	//	}
 	//	else return;// 沒有分子, 所以就不提供
 	//	break;
-	case MAGIC:
-		// 從 _FreeList 取得一個分子給放到 _InUsed
-		if (_iFree > 100) {
-			for (int i = 0; i < 50; i++) {
-				get = _FreeList.front();
-				get->setBehavior(MAGIC);
-				get->setPosition(touchPoint);
-				get->setGravity(_fGravity);
-				get->setParticleName(name);
-				_FreeList.pop_front();
-				_InUsedList.push_front(get);
-				_iFree--; _iInUsed++;
-			}
-			Color3B color = Color3B(rand() % 255, rand() % 255, rand() % 255);
-			for (int i = 0; i < 50; i++) {
-				Vec2 pos;
-				float r = (float)i / 50 * M_PI * 2;
-				pos.x = touchPoint.x + 200 * cosf(r);
-				pos.y = touchPoint.y + 200 * sinf(r) / 2;
-				get = _FreeList.front();
-				get->setBehavior(EMITTER_DEFAULT);
-				get->setVelocity(2);
-				get->setLifetime(0.5);
-				get->setGravity(0);
-				get->setPosition(pos);
-				get->setColor(color);
-				get->setSpin(0);
-				get->setOpacity(255);
-				get->setSize(0.025f);
-				//get->setParticleName(_cName);
-				get->setParticleName(name);
-				get->setWindDir(0);
-				get->setWindStr(0);
-				Vec2 vdir(cosf(r)*3, 4);
-				get->setDirection(vdir);
-				_FreeList.pop_front();
-				_InUsedList.push_front(get);
-				_iFree--; _iInUsed++;
-			}
-		}
-		else return;// 沒有分子, 所以就不提供
-		break;
 	case BALLOON:
 		balloonSize = 0.5f;
 		_bBalloon = 1;
@@ -723,6 +748,11 @@ void CParticleSystem::onTouchesEnded(const cocos2d::CCPoint &touchPoint)
 	mouse = touchPoint;
 	switch (_iType)
 	{
+		case MAGIC:
+			_bmagic = 0;
+			_monster->setVisible(false);
+			_fElpasedTime = 0;
+			break;
 		case BALLOON:
 			_bBalloon = 2;
 			break;

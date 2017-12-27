@@ -594,6 +594,7 @@ void ParticleSystemScene::TypeEvent(cocos2d::Ref* sender, cocos2d::ui::Slider::E
 		_TypeBMValue->setString(StringUtils::format("%2d", iType));
 		itype = iType;
 		if (iType == THUNDER)_ParticleControl._bThunder = 1;
+		// else if(iType == MAGIC)_ParticleControl._bmagic = 1;
 		else _ParticleControl._bThunder = 0;
 		if (!_bEmitterOn)  _ParticleControl.setType(iType);
 		

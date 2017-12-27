@@ -256,6 +256,19 @@
                 <key>scale9FromFile</key>
                 <false/>
             </struct>
+            <key type="filename">monster.png</key>
+            <struct type="IndividualSpriteSettings">
+                <key>pivotPoint</key>
+                <point_f>0.5,0.5</point_f>
+                <key>scale9Enabled</key>
+                <false/>
+                <key>scale9Borders</key>
+                <rect>50,38,100,75</rect>
+                <key>scale9Paddings</key>
+                <rect>50,38,100,75</rect>
+                <key>scale9FromFile</key>
+                <false/>
+            </struct>
             <key type="filename">sliderProgress.png</key>
             <key type="filename">sliderTrack.png</key>
             <struct type="IndividualSpriteSettings">
@@ -319,6 +332,7 @@
             <filename>airplaneon.png</filename>
             <filename>airplanetd.png</filename>
             <filename>airplane.png</filename>
+            <filename>monster.png</filename>
         </array>
         <key>ignoreFileList</key>
         <array/>

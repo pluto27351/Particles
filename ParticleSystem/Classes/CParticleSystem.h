@@ -25,10 +25,11 @@ private:
 	int _mode = 0;
 	char *name;
 	cocos2d::Point mouse;
-	
+	cocos2d::Sprite *_monster;
 public:
 	int _bThunder = 0;
 	int _bAiroplane = 0;
+	int _bmagic = 0;
 	// Emitter 設定的相關參數
 	cocos2d::Point _emitterPt;// Emitter 的位置	
 	cocos2d::Point em;
