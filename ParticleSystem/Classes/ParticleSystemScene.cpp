@@ -278,6 +278,7 @@ void  ParticleSystemScene::onTouchEnded(cocos2d::Touch *pTouch, cocos2d::Event *
 		else { // 關閉 Emitter 圖示
 			_EmitterSprite->setVisible(false);
 			_ParticleControl._iType = itype;
+			_nowbtn = NULL;
 		}
 		_ParticleControl.setEmitter(_bEmitterOn); // 更新控制系統中的 Emitter 狀態
 	}
@@ -298,6 +299,7 @@ void  ParticleSystemScene::onTouchEnded(cocos2d::Touch *pTouch, cocos2d::Event *
 		else { // 關閉 Emitter 圖示
 			_EmitterSprite->setVisible(false);
 			_ParticleControl._iType = itype;
+			_nowbtn = NULL;
 		}
 		_ParticleControl.setEmitter(_bEmitterOn); // 更新控制系統中的 Emitter 狀態
 	}
@@ -318,6 +320,7 @@ void  ParticleSystemScene::onTouchEnded(cocos2d::Touch *pTouch, cocos2d::Event *
 		else { // 關閉 Emitter 圖示
 			_EmitterSprite->setVisible(false);
 			_ParticleControl._iType = itype;
+			_nowbtn = NULL;
 		}
 		_ParticleControl.setEmitter(_bEmitterOn); // 更新控制系統中的 Emitter 狀態
 	}
@@ -338,6 +341,7 @@ void  ParticleSystemScene::onTouchEnded(cocos2d::Touch *pTouch, cocos2d::Event *
 		else { // 關閉 Emitter 圖示
 			_EmitterSprite->setVisible(false);
 			_ParticleControl._iType = itype;
+			_nowbtn = NULL;
 		}
 		_ParticleControl.setEmitter(_bEmitterOn); // 更新控制系統中的 Emitter 狀態
 	}
@@ -360,6 +364,7 @@ void  ParticleSystemScene::onTouchEnded(cocos2d::Touch *pTouch, cocos2d::Event *
 		else { // 關閉 Emitter 圖示
 			_EmitterSprite->setVisible(false);
 			_ParticleControl._iType = itype;
+			_nowbtn = NULL;
 		}
 		_ParticleControl.setEmitter(_bEmitterOn); // 更新控制系統中的 Emitter 狀態
 	}
@@ -559,6 +564,7 @@ void ParticleSystemScene::TypeEvent(cocos2d::Ref* sender, cocos2d::ui::Slider::E
 		_TypeBMValue->setString(StringUtils::format("%2d", iType));
 		itype = iType;
 		if (iType == THUNDER)_ParticleControl._bThunder = 1;
+		else _ParticleControl._bThunder = 0;
 		if (!_bEmitterOn)  _ParticleControl.setType(iType);
 		
 	}

@@ -308,6 +308,7 @@ void CParticleSystem::doStep(float dt)
 								get->setRDelayTime(0);
 								get->setColor(Color3B(255, 75, 75));
 								get->setDelayTime(0);
+								get->setWindStr(0);
 								if (em.y > 400) { 
 									float size = (2+sin((em.y - 400) / 100 * M_PI)*2);
 									get->setSize(size);
