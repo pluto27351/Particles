@@ -31,7 +31,7 @@ public:
 	void setVisible(bool bVis);
 	void setScale(float scale);
 	bool getStatus();
-	void setStatus(bool);
+	void setStatusfalse();
 
 };
 

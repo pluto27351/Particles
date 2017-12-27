@@ -21,11 +21,13 @@ private:
 	bool _bEmitterOn; // Emitter 是否顯示
 	int fireworkmode = 1;
 	float balloonSize=0.125f;
-	int _bBalloon=0;
+	int _bBalloon = 0;
 	int _mode = 0;
+	char *name;
 	cocos2d::Point mouse;
 	
 public:
+	int _bThunder = 0;
 	// Emitter 設定的相關參數
 	cocos2d::Point _emitterPt;// Emitter 的位置	
 	cocos2d::Point em;
@@ -62,7 +64,7 @@ public:
 	void setGravity(float fGravity);
 	void setWindDir(float fwindd);
 	void setWindStr(float fwinds);
-	void setParticlesName(char *);
+	void setName(char *);
 };
 
 #endif

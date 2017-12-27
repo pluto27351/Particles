@@ -195,7 +195,7 @@ bool ParticleSystemScene::init()
 	btn[5].set(Vec2(btnPos+80*5, 50), "comet.png");    addChild(btn+5, 1);
 	btn[6].set(Vec2(btnPos+80*6, 50), "spark.png");    addChild(btn+6, 1);
 	btn[0].setUse();
-	_ParticleControl.setParticlesName(btn[0]._SpriteName);
+	_ParticleControl.setName(btn[0]._SpriteName);
 
 	_listener1 = EventListenerTouchOneByOne::create();	//創建一個一對一的事件聆聽器
 	_listener1->onTouchBegan = CC_CALLBACK_2(ParticleSystemScene::onTouchBegan, this);		//加入觸碰開始事件
@@ -266,11 +266,11 @@ void  ParticleSystemScene::onTouchEnded(cocos2d::Touch *pTouch, cocos2d::Event *
 	{
 		_bEmitterOn = _emitterSwitchBtn->getStatus();
 		if ( _bEmitterOn ) { // 顯示 Emitter 圖示
-			if (_newbtn) {
-				_newbtn->setStatus(false);
+			if (_nowbtn) {
+				_nowbtn->setStatusfalse();
 			}
 			_ParticleControl._emitterPt = _EmitterSprite->getLoc();
-			_newbtn = _emitterSwitchBtn;
+			_nowbtn = _emitterSwitchBtn;
 			_EmitterSprite->setVisible(true);
 			_ParticleControl.em = _ParticleControl._emitterPt;
 			_ParticleControl._iType = 99;
@@ -286,11 +286,11 @@ void  ParticleSystemScene::onTouchEnded(cocos2d::Touch *pTouch, cocos2d::Event *
 	{
 		_bEmitterOn = _fireworkSwitchBtn->getStatus();
 		if (_bEmitterOn) { // 顯示 Emitter 圖示
-			if (_newbtn) {
-				_newbtn->setStatus(false);
+			if (_nowbtn) {
+				_nowbtn->setStatusfalse();
 				
 			}
-			_newbtn = _fireworkSwitchBtn;
+			_nowbtn = _fireworkSwitchBtn;
 			_EmitterSprite->setVisible(true);
 			_ParticleControl._iType = 100;
 			_ParticleControl.em = _ParticleControl._emitterPt - Vec2(0, 450);
@@ -306,11 +306,11 @@ void  ParticleSystemScene::onTouchEnded(cocos2d::Touch *pTouch, cocos2d::Event *
 	{
 		_bEmitterOn = _rollSwitchBtn->getStatus();
 		if (_bEmitterOn) { // 顯示 Emitter 圖示
-			if (_newbtn) {
-				_newbtn->setStatus(false);
+			if (_nowbtn) {
+				_nowbtn->setStatusfalse();
 				
 			}
-			_newbtn = _rollSwitchBtn;
+			_nowbtn = _rollSwitchBtn;
 			_EmitterSprite->setVisible(true);
 			_ParticleControl.em = _ParticleControl._emitterPt;
 			_ParticleControl._iType = 101;
@@ -326,11 +326,11 @@ void  ParticleSystemScene::onTouchEnded(cocos2d::Touch *pTouch, cocos2d::Event *
 	{
 		_bEmitterOn = _waterballSwitchBtn->getStatus();
 		if (_bEmitterOn) { // 顯示 Emitter 圖示
-			if (_newbtn) {
-				_newbtn->setStatus(false);
+			if (_nowbtn) {
+				_nowbtn->setStatusfalse();
 				
 			}
-			_newbtn = _waterballSwitchBtn;
+			_nowbtn = _waterballSwitchBtn;
 			_EmitterSprite->setVisible(true);
 			_ParticleControl.em = _ParticleControl._emitterPt;
 			_ParticleControl._iType =102;
@@ -346,11 +346,11 @@ void  ParticleSystemScene::onTouchEnded(cocos2d::Touch *pTouch, cocos2d::Event *
 	{
 		_bEmitterOn = _bombSwitchBtn->getStatus();
 		if (_bEmitterOn) { // 顯示 Emitter 圖示
-			if (_newbtn) {
-				_newbtn->setStatus(false);
+			if (_nowbtn) {
+				_nowbtn->setStatusfalse();
 				
 			}
-			_newbtn = _bombSwitchBtn;
+			_nowbtn = _bombSwitchBtn;
 			_EmitterSprite->setVisible(true);
 			_ParticleControl._iType = 103;
 			_ParticleControl.em = _ParticleControl._emitterPt + Vec2(0, 450);
@@ -371,7 +371,8 @@ void  ParticleSystemScene::onTouchEnded(cocos2d::Touch *pTouch, cocos2d::Event *
 			if (i != _iUsedBtnNum) {
 				btn[_iUsedBtnNum].setUnuse();
 				_iUsedBtnNum = i;
-				_ParticleControl.setParticlesName(btn[_iUsedBtnNum]._SpriteName);
+				//_ParticleControl.setParticlesName(btn[_iUsedBtnNum]._SpriteName);
+				_ParticleControl.setName(btn[_iUsedBtnNum]._SpriteName);
 			}
 			
 		}
@@ -556,21 +557,8 @@ void ParticleSystemScene::TypeEvent(cocos2d::Ref* sender, cocos2d::ui::Slider::E
 		int maxPercent = slider->getMaxPercent();
 		int iType = ((float)percent/25)*2; // 0 到 8 之間
 		_TypeBMValue->setString(StringUtils::format("%2d", iType));
-		/*if(_bEmitterOn){ 
-			_ParticleControl.setType(iType + 99);
-			switch (iType + 99) {
-				case FIREWORK:
-					_ParticleControl.em = _ParticleControl._emitterPt - Vec2(0, 450);
-					break;
-				case BOMB:
-					_ParticleControl.em = _ParticleControl._emitterPt + Vec2(0, 450);
-					_ParticleControl._fSpread = 13.0f;
-					_ParticleControl._fElpasedTime = 0;
-					break;
-			}
-		}
-		else { _ParticleControl.setType(iType); }*/
 		itype = iType;
+		if (iType == THUNDER)_ParticleControl._bThunder = 1;
 		if (!_bEmitterOn)  _ParticleControl.setType(iType);
 		
 	}

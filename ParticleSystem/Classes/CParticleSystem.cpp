@@ -32,6 +32,40 @@ void CParticleSystem::doStep(float dt)
 {
 	CParticle *get;
 	list <CParticle *>::iterator it;
+	if (!_bEmitterOn) {
+		if (_bThunder == 1) {
+			if (_iFree != 0) {
+				Vec2 pos;
+				pos.x = rand() % 900;
+				pos.y = 550 + rand() % 170;
+				get = _FreeList.front();
+				get->setBehavior(THUNDERCLOUD);
+				get->setPosition(pos);
+				get->setParticleName("cloud.png");
+				_FreeList.pop_front();
+				_InUsedList.push_front(get);
+				_iFree--; _iInUsed++;
+			}
+		}
+		else if (_bThunder == 2) {
+			if (_iFree >= 60) {
+				for (int i = 0; i < 60; i++) {
+					Vec2 pos;
+					pos.x = rand() % 900;
+					pos.y = 550 + rand() % 170;
+					get = _FreeList.front();
+					get->setBehavior(THUNDERCLOUD);
+					get->setPosition(pos);
+					get->setParticleName("cloud.png");
+					_FreeList.pop_front();
+					_InUsedList.push_front(get);
+					_iFree--; _iInUsed++;
+				}
+				_bThunder = 1;
+			}
+		}
+	}
+	
 	if (_bBalloon == 1) {
 		if (_iFree != 0) {
 			balloonSize += dt*0.5;
@@ -90,7 +124,8 @@ void CParticleSystem::doStep(float dt)
 								get->setSpin(_fSpin);
 								get->setOpacity(_fOpacity);
 								get->setSize(0.125f);
-								get->setParticleName(_cName);
+								//get->setParticleName(_cName);
+								get->setParticleName(name);
 								get->setWindDir(_fWindDir);
 								get->setWindStr(_fWindStr);
 								// 根據 _fSpread 與 _vDir 產生方向
@@ -181,7 +216,8 @@ void CParticleSystem::doStep(float dt)
 							get->setSpin(_fSpin);
 							get->setOpacity(255);
 							get->setSize(0.125f);
-							get->setParticleName(_cName);
+							//get->setParticleName(_cName);
+							get->setParticleName(name);
 							// 根據 _fSpread 與 _vDir 產生方向
 							float t = (rand() % 1001) / 1000.0f; // 產生介於 0 到 1 間的數
 							get->setDirection(vdir);
@@ -210,7 +246,8 @@ void CParticleSystem::doStep(float dt)
 							get->setOpacity(255);
 							get->setSize(0.05f);
 							get->setEm(_emitterPt);
-							get->setParticleName(_cName);
+							//get->setParticleName(_cName);
+							get->setParticleName(name);
 							get->setRDelayTime(0.05f*i);
 							// 根據 _fSpread 與 _vDir 產生方向
 							get->setDirection(vfdir);
@@ -274,7 +311,6 @@ void CParticleSystem::doStep(float dt)
 								if (em.y > 400) { 
 									float size = (2+sin((em.y - 400) / 100 * M_PI)*2);
 									get->setSize(size);
-									CCLOG("%f", size);
 								}
 								else { get->setSize(1.5f); }
 								get->setParticleName("cloud.png");
@@ -352,13 +388,11 @@ void CParticleSystem::setWindStr(float fwinds)
 	}
 }
 
-void CParticleSystem::setParticlesName(char *c)
-{
-	_cName = c;
-	for (int i = 0; i < NUMBER_PARTICLES; i++) {
-		_pParticles[i].setParticleName(_cName);
 
-	}
+void CParticleSystem::setName(char *c)
+{
+	name = c;
+	
 }
 
 CParticleSystem::~CParticleSystem()
@@ -381,6 +415,7 @@ void CParticleSystem::onTouchesBegan(const cocos2d::CCPoint &touchPoint)
 			get->setBehavior(STAY_FOR_TWOSECONDS);
 			get->setPosition(touchPoint);
 			get->setGravity(_fGravity);
+			get->setParticleName(name);
 			_FreeList.pop_front();
 			_InUsedList.push_front(get);
 			_iFree--; _iInUsed++;
@@ -393,6 +428,7 @@ void CParticleSystem::onTouchesBegan(const cocos2d::CCPoint &touchPoint)
 			get->setBehavior(RANDOMS_FALLING);
 			get->setPosition(touchPoint);
 			get->setGravity(_fGravity);
+			get->setParticleName(name);
 			_FreeList.pop_front();
 			_InUsedList.push_front(get);
 			_iFree--; _iInUsed++;
@@ -406,6 +442,7 @@ void CParticleSystem::onTouchesBegan(const cocos2d::CCPoint &touchPoint)
 			get->setBehavior(FREE_FLY);
 			get->setPosition(touchPoint);
 			get->setGravity(_fGravity);
+			get->setParticleName(name);
 			_FreeList.pop_front();
 			_InUsedList.push_front(get);
 			_iFree--; _iInUsed++;
@@ -420,6 +457,7 @@ void CParticleSystem::onTouchesBegan(const cocos2d::CCPoint &touchPoint)
 				get->setBehavior(EXPLOSION);
 				get->setPosition(touchPoint);
 				get->setGravity(_fGravity);
+				get->setParticleName(name);
 				_FreeList.pop_front();
 				_InUsedList.push_front(get);
 				_iFree--; _iInUsed++;
@@ -435,6 +473,7 @@ void CParticleSystem::onTouchesBegan(const cocos2d::CCPoint &touchPoint)
 				get->setBehavior(HEARTSHAPE);
 				get->setPosition(touchPoint);
 				get->setGravity(_fGravity);
+				get->setParticleName(name);
 				_FreeList.pop_front();
 				_InUsedList.push_front(get);
 				_iFree--; _iInUsed++;
@@ -450,6 +489,7 @@ void CParticleSystem::onTouchesBegan(const cocos2d::CCPoint &touchPoint)
 				get->setBehavior(BUTTERFLYSHAPE);
 				get->setPosition(touchPoint);
 				get->setGravity(_fGravity);
+				get->setParticleName(name);
 				_FreeList.pop_front();
 				_InUsedList.push_front(get);
 				_iFree--; _iInUsed++;
@@ -458,41 +498,57 @@ void CParticleSystem::onTouchesBegan(const cocos2d::CCPoint &touchPoint)
 		else return;// 沒有分子, 所以就不提供
 		break;
 	case THUNDER:
-		// 從 _FreeList 取得一個分子給放到 _InUsed
-		if (_iFree > 60) {
-			float r = rand()%51-25;
-			r = r*M_PI/180;
-			int k = rand() % 2*2-1;
-			for (int i = 0; i < 60; i++) {
-				Vec2 move = Vec2(0, 450);
-				if (i < 20) {
-					move.x -= (100 / 20 * i)*k;
-					move.y -= (150 / 20 * i );
-				}
-				else if (i < 40) {
-					move.x += (-100 +(200 / 20 * (i-19)))*k;
-					move.y -= (150 + (75 / 20 * (i - 19)));
-				}
-				else {
-					move.x -= (-90 + (100 / 20 * (i - 39)))*k;
-					move.y -= (213 + (225 / 20 * (i - 39)));
-				}
-				move.x = cosf(r)*move.x + sinf(r)*move.y;
-				move.y = -sinf(r)*move.x + cosf(r)*move.y;
+		if (_iFree > 100) {
+			_bThunder = 2;
+			for (int i = 0; i < 100; i++) {
 				get = _FreeList.front();
 				get->setBehavior(THUNDER);
-				get->setPosition(touchPoint + move);
+				get->setPosition(touchPoint+Vec2(0,450));
 				get->setGravity(_fGravity);
-				get->setRDelayTime((float)i/150);
-				get->setSize(4-(float)i/16);
-				get->setDelayTime(0);
+				get->setParticleName(name);
 				_FreeList.pop_front();
 				_InUsedList.push_front(get);
 				_iFree--; _iInUsed++;
 			}
 		}
-		else return;// 沒有分子, 所以就不提供
 		break;
+	//case THUNDER:
+	//	// 從 _FreeList 取得一個分子給放到 _InUsed
+	//	if (_iFree > 60) {
+	//		float r = rand()%51-25;
+	//		r = r*M_PI/180;
+	//		int k = rand() % 2*2-1;
+	//		for (int i = 0; i < 60; i++) {
+	//			Vec2 move = Vec2(0, 450);
+	//			if (i < 20) {
+	//				move.x -= (100 / 20 * i)*k;
+	//				move.y -= (150 / 20 * i );
+	//			}
+	//			else if (i < 40) {
+	//				move.x += (-100 +(200 / 20 * (i-19)))*k;
+	//				move.y -= (150 + (75 / 20 * (i - 19)));
+	//			}
+	//			else {
+	//				move.x -= (-90 + (100 / 20 * (i - 39)))*k;
+	//				move.y -= (213 + (225 / 20 * (i - 39)));
+	//			}
+	//			move.x = cosf(r)*move.x + sinf(r)*move.y;
+	//			move.y = -sinf(r)*move.x + cosf(r)*move.y;
+	//			get = _FreeList.front();
+	//			get->setBehavior(THUNDER);
+	//			//get->setPosition(touchPoint + move);
+	//			get->setPosition(touchPoint);
+	//			get->setGravity(_fGravity);
+	//			get->setRDelayTime((float)i/150);
+	//			get->setSize(4-(float)i/16);
+	//			get->setDelayTime(0);
+	//			_FreeList.pop_front();
+	//			_InUsedList.push_front(get);
+	//			_iFree--; _iInUsed++;
+	//		}
+	//	}
+	//	else return;// 沒有分子, 所以就不提供
+	//	break;
 	case MAGIC:
 		// 從 _FreeList 取得一個分子給放到 _InUsed
 		if (_iFree > 100) {
@@ -501,6 +557,7 @@ void CParticleSystem::onTouchesBegan(const cocos2d::CCPoint &touchPoint)
 				get->setBehavior(MAGIC);
 				get->setPosition(touchPoint);
 				get->setGravity(_fGravity);
+				get->setParticleName(name);
 				_FreeList.pop_front();
 				_InUsedList.push_front(get);
 				_iFree--; _iInUsed++;
@@ -521,7 +578,8 @@ void CParticleSystem::onTouchesBegan(const cocos2d::CCPoint &touchPoint)
 				get->setSpin(0);
 				get->setOpacity(255);
 				get->setSize(0.025f);
-				get->setParticleName(_cName);
+				//get->setParticleName(_cName);
+				get->setParticleName(name);
 				get->setWindDir(0);
 				get->setWindStr(0);
 				Vec2 vdir(cosf(r)*3, 4);
@@ -553,6 +611,7 @@ void CParticleSystem::onTouchesMoved(const cocos2d::CCPoint &touchPoint)
 			get->setBehavior(STAY_FOR_TWOSECONDS);
 			get->setPosition(touchPoint);
 			get->setGravity(_fGravity);
+			get->setParticleName(name);
 			_FreeList.pop_front();
 			_InUsedList.push_front(get);
 			_iFree--; _iInUsed++;
@@ -565,6 +624,7 @@ void CParticleSystem::onTouchesMoved(const cocos2d::CCPoint &touchPoint)
 			get->setBehavior(RANDOMS_FALLING);
 			get->setPosition(touchPoint);
 			get->setGravity(_fGravity);
+			get->setParticleName(name);
 			_FreeList.pop_front();
 			_InUsedList.push_front(get);
 			_iFree--; _iInUsed++;
@@ -578,6 +638,7 @@ void CParticleSystem::onTouchesMoved(const cocos2d::CCPoint &touchPoint)
 			get->setBehavior(FREE_FLY);
 			get->setPosition(touchPoint);
 			get->setGravity(_fGravity);
+			get->setParticleName(name);
 			_FreeList.pop_front();
 			_InUsedList.push_front(get);
 			_iFree--; _iInUsed++;

@@ -8,6 +8,7 @@
 #define HEARTSHAPE 4			// 噴射出心型的煙火
 #define BUTTERFLYSHAPE	5		// 噴射出蝴蝶外型的煙火
 #define THUNDER	6		        // 雷擊
+#define THUNDERCLOUD	61		        // 雷擊
 #define MAGIC	7		        // 魔法陣
 #define BALLOON	8		        // 氣球
 

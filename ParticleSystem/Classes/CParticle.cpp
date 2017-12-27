@@ -163,8 +163,25 @@ bool CParticle::doStep(float dt)
 		break;
 	case THUNDER:
 		if (!_bVisible && _fElapsedTime >= _fRDelayTime) {
+			float t = rand() % 90;
+			if (t < 30) {
+				_Pos.x = _Pos.x - 30* (t / 29);
+				_Pos.y = _Pos.y - 150* (t / 29);
+									  
+			}						  
+			else if (t < 60) {		  
+				t -= 30;			  
+				_Pos.x = _Pos.x - 30 + 60 * (t / 29);
+				_Pos.y = _Pos.y - 150 - 70 * (t / 29);
+			}						  
+			else {					  
+				t -= 60;			  
+				_Pos.x = _Pos.x - 30 + 60 - 30 * (t / 29);
+				_Pos.y = _Pos.y - 150 - 70 - 230  * (t / 29);
+			}
 			_fElapsedTime = 0; // 重新開始計時
 			_bVisible = true;
+			_fSize = (0.8 - t / 90 );
 			_Particle->setVisible(_bVisible);
 			_Particle->setColor(_color);
 			_Particle->setPosition(_Pos);
@@ -177,10 +194,33 @@ bool CParticle::doStep(float dt)
 		}
 		else {
 			sint = sinf(M_PI*_fElapsedTime / _fLifeTime);
+			cost = cosf(M_PI*_fElapsedTime / _fLifeTime);
+			_Particle->setScale(_fSize);
+			_Particle->setOpacity(_fOpacity * cost);
+			_Particle->setColor(_color);
+			_Particle->setPosition(_Pos);
+		}
+		break;
+	case THUNDERCLOUD:
+		if (!_bVisible && _fElapsedTime >= _fDelayTime) {
+			_fElapsedTime = _fElapsedTime - _fDelayTime; // 重新開始計時
+			_bVisible = true;
+			_Particle->setVisible(_bVisible);
+			_Particle->setColor(_color);
+			_Particle->setPosition(_Pos);
+		}
+		else if (_fElapsedTime > _fLifeTime) {
+			_bVisible = false;
+			_Particle->setVisible(_bVisible);
+			return true; // 分子生命週期已經結束
+		}
+		else {
+			sint = sinf(M_PI*_fElapsedTime / _fLifeTime*2);
 			cost = cosf(M_PI_2*_fElapsedTime / _fLifeTime);
 			_Particle->setScale(_fSize + sint * 1.5f);
 			_Particle->setOpacity(_fOpacity * cost);
 			_Particle->setColor(_color);
+			_Pos.x += 5*sint;
 			_Particle->setPosition(_Pos);
 		}
 		break;
@@ -507,14 +547,28 @@ void CParticle::setBehavior(int iType)
 		_fGravity = 0;
 		break;
 	case THUNDER:
-		_fVelocity = 1.0f;
-		_Direction = Vec2(-4, -3);
+		_fVelocity = 0;
+		//_Direction = Vec2(-4, -3);
 		_fLifeTime = 1;
 		_fIntensity = 1;
 		_fOpacity = 255;
 		_fSpin = 0;
-		//_fSize = 2;
-		_color = Color3B(0,58, 255);
+		_fSize = 0.5f;
+		_fRDelayTime = 0;
+		_color = Color3B(0, 58, 255);
+		_fElapsedTime = 0;
+		_fGravity = 0;
+		break;
+	case THUNDERCLOUD:
+		_fVelocity = 0.5f;
+		//_Direction = Vec2(-4, -3);
+		_fLifeTime = 2;
+		_fIntensity = 1;
+		_fOpacity = 100;
+		_fSpin = 0;
+		_fDelayTime = 0;
+		_fSize = 5;
+		_color = Color3B(255,255,255);
 		_fElapsedTime = 0;
 		_fGravity = 0;
 		break;
